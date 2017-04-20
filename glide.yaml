@@ -1,0 +1,6 @@
+package: github.com/mstrzele/minikube-nfs
+import:
+- package: github.com/Masterminds/semver
+  version: ~1.2.3
+- package: github.com/Sirupsen/logrus
+  version: ~0.11.5
