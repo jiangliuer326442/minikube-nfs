@@ -1,0 +1,37 @@
+language: go
+
+go:
+  - 1.8
+
+env:
+  - GOOS=darwin GOARCH=amd64
+
+before_install:
+  - sudo add-apt-repository ppa:masterminds/glide -y
+  - sudo apt-get update -q
+  - sudo apt-get install glide -y
+
+install:
+  - glide install
+  - go install
+
+before_script:
+  - go get -u github.com/alecthomas/gometalinter
+  - gometalinter --install
+
+script:
+  - gometalinter --deadline=5m $(glide novendor)
+  - go test -v $(glide novendor)
+
+after_success: go build -v -ldflags "-X main.metadata=$TRAVIS_BUILD_NUMBER"
+
+deploy:
+  provider: releases
+  api_key:
+    secure: pQndqhpbgZ2RR7hmlOHx497BUOtn5oGzP5sVF9sbJfN+5z10zhz+Al92Yy9BiTzOpjxD2p8OixZ7K8snRyp8K+JxsDHC+FfVSN3TXnUfdqeBl9G0IKNkrCVUqTxXd31j9uUW38Re0WeHAPEh/GNpfkQoq/671nuh6DzONaS725qvSrR//K6SlifvpPjKjtx2BL5LF+S3eK13rLzekgC0yx27I+KAdRCqgQVOsidNsyP5CPEYqbboosWeWQWQzLQISmNhdqLSmhFf9djE+mq/fWM2rZMtD7wC9eihnG00XeF7t7e0WsZfjmWGzHsZfgPj9QG4cADT/pJoFdJ1F2qQ3XDUBVJBuFSa12fkR/hmAb9tDHIAe3VXmZFPqYBW9MwV8DT0ZuYCFCFf5vqq/ltqr3FzcI04HK7yfHl9eoySwzcAHeQl2bX39wf5FWuw+9GPMFuZ3VjjB3D5hMR8krY+OXgMdOGj1ZzDbS22oRJMVDTLN/LWkQuq2Yziir6L9usJDJPdA+xhsNguTYJ3XvcQhz/1vLoTBMj4A4uWOGKdhYg0JQ2mo1onPkIAaLMvWb28b0uFooeBo6nbAoY4RHsGUDUTHwusywVuGwyG+bj6xVWAW6kPE6pgu19boehdc/6mlWPxQJ/tMnLS72h4FWqB1J1FVmkaZwikERMjn8nwCPI=
+  file:
+    - "minikube"
+  skip_cleanup: true
+  on:
+    tags: true
+    go: 1.8
