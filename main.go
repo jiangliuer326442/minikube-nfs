@@ -2,22 +2,22 @@ package main
 
 import (
 	"fmt"
-	"os/user"
+	"os"
 
 	log "github.com/Sirupsen/logrus"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
 var (
-	debug        bool
-	force        bool
-	nfsConfig    string
-	sharedFolder []string
-	mountOpts    string
-	useIPRange   bool
+	debug         = kingpin.Flag("debug", "Enable debug mode.").Short('d').Bool()
+	force         = kingpin.Flag("force", "Force reconfiguration of NFS.").Short('f').Bool()
+	nfsConfig     = kingpin.Flag("nfs-config", "NFS configuration to use in /etc/exports.").Default(fmt.Sprintf("-alldirs -mapall=%d:%d", os.Getuid(), os.Getgid())).Short('n').String()
+	sharedFolders = kingpin.Flag("shared-folder", "Folder to share").Default("/Users").Short('s').Strings()
+	mountOpts     = kingpin.Flag("mount-opts", "NFS mount options").Default("noacl,async").Short('m').String()
+	useIPRange    = kingpin.Flag("use-ip-range", "Changes the nfs export ip to a range (e.g. -network 192.168.99.100 becomes -network 192.168.99)").Short('i').Bool()
 )
 
-func main() {
+func parseCLI() {
 	v, err := version()
 	if err != nil {
 		log.Error(err.Error())
@@ -28,23 +28,20 @@ func main() {
 	kingpin.CommandLine.HelpFlag.Short('h')
 	kingpin.CommandLine.VersionFlag.Short('v')
 
-	kingpin.Flag("debug", "Enable debug mode.").Short('d').BoolVar(&debug)
-	kingpin.Flag("force", "Force reconfiguration of NFS.").Short('f').BoolVar(&force)
-
-	u, err := user.Current()
-	if err != nil {
-		log.Error(err.Error())
-	}
-
-	kingpin.Flag("nfs-config", "NFS configuration to use in /etc/exports.").Default(fmt.Sprintf("-alldirs -mapall=%s:%s", u.Uid, u.Gid)).Short('n').StringVar(&nfsConfig)
-
-	kingpin.Flag("shared-folder", "Folder to share").Default("/Users").Short('s').StringsVar(&sharedFolder)
-	kingpin.Flag("mount-opts", "NFS mount options").Default("noacl,async").Short('m').StringVar(&mountOpts)
-	kingpin.Flag("use-ip-range", "Changes the nfs export ip to a range (e.g. -network 192.168.99.100 becomes -network 192.168.99)").Short('i').BoolVar(&useIPRange)
-
 	kingpin.Parse()
 
-	if debug {
+	if *debug {
 		log.SetLevel(log.DebugLevel)
 	}
+}
+
+func main() {
+	parseCLI()
+
+	checkClusterPresence()
+	checkClusterRunning()
+
+	clusterIP := lookupMandatoryProperties()
+
+	configureNFS(*nfsConfig, *sharedFolders, clusterIP, *useIPRange)
 }
