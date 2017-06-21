@@ -48,7 +48,7 @@ func lookupMandatoryProperties() net.IP {
 	if clusterIP != nil {
 		logger.Info("Lookup mandatory properties ...")
 		return clusterIP
-	} else {
-		return nil
 	}
+
+	return nil
 }

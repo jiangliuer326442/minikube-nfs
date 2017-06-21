@@ -8,6 +8,7 @@ import (
 
 const ExportsFile = "/etc/exports"
 
+// Specifies the host set.
 type Hosts struct {
 	Names   []string
 	Network *net.IPNet
@@ -31,6 +32,7 @@ func (h Hosts) String() string {
 	return s
 }
 
+// Define remote mount points for NFS mount requests.
 type Export struct {
 	Directories []string
 	Flags       []string

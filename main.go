@@ -10,10 +10,8 @@ import (
 
 var (
 	debug         = kingpin.Flag("debug", "Enable debug mode.").Short('d').Bool()
-	force         = kingpin.Flag("force", "Force reconfiguration of NFS.").Short('f').Bool()
 	nfsConfig     = kingpin.Flag("nfs-config", "NFS configuration to use in /etc/exports.").Default(fmt.Sprintf("-alldirs -mapall=%d:%d", os.Getuid(), os.Getgid())).Short('n').String()
 	sharedFolders = kingpin.Flag("shared-folder", "Folder to share").Default("/Users").Short('s').Strings()
-	mountOpts     = kingpin.Flag("mount-opts", "NFS mount options").Default("noacl,async").Short('m').String()
 	useIPRange    = kingpin.Flag("use-ip-range", "Changes the nfs export ip to a range (e.g. -network 192.168.99.100 becomes -network 192.168.99)").Short('i').Bool()
 )
 

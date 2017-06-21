@@ -40,6 +40,7 @@ func command(command ...string) (string, error) {
 
 const minikubeStatusFormat = "{{.MinikubeStatus}},{{.LocalkubeStatus}}"
 
+// Gets the status of a local kubernetes cluster.
 func Status() (string, string, error) {
 	out, err := command("status", "--format", fmt.Sprintf("%s", minikubeStatusFormat))
 	if err != nil {
@@ -57,6 +58,7 @@ func Status() (string, string, error) {
 	}
 }
 
+// Retrieves the IP address of the running cluster.
 func IP() (net.IP, error) {
 	out, err := command("ip")
 	if err != nil {
