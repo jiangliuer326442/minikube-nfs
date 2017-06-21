@@ -8,37 +8,37 @@ func command(command string) error {
 	return cmd.Run()
 }
 
-// Enables the nfsd service.
+// Enable enables the nfsd service.
 func Enable() error {
 	return command("enable")
 }
 
-// Disables the nfsd service.
+// Disable disables the nfsd service.
 func Disable() error {
 	return command("disable")
 }
 
-// Starts the nfsd service.
+// Start starts the nfsd service.
 func Start() error {
 	return command("start")
 }
 
-// Stops the nfsd service.
+// Stop stops the nfsd service.
 func Stop() error {
 	return command("stop")
 }
 
-// Restarts the nfsd service.
+// Restart restarts the nfsd service.
 func Restart() error {
 	return command("restart")
 }
 
-// Sends a SIGHUP to the running nfsd daemon to cause it to update its configuration.
+// Update sends a SIGHUP to the running nfsd daemon to cause it to update its configuration.
 func Update() error {
 	return command("update")
 }
 
-// Checks the exports file and reports any errors.
+// CheckExports checks the exports file and reports any errors.
 func CheckExports() error {
 	return command("checkexports")
 }
