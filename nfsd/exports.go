@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+// ExportsFile specifies an alternate location for the exports file.
 const ExportsFile = "/etc/exports"
 
 // Hosts specify the host set.

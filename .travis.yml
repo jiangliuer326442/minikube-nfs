@@ -20,7 +20,7 @@ before_script:
   - gometalinter --install
 
 script:
-  - gometalinter --deadline=5m $(glide novendor)
+  - gometalinter --deadline=5m --errors $(glide novendor)
   - go test -v $(glide novendor)
 
 after_success: go build -v -ldflags "-X main.metadata=$TRAVIS_BUILD_NUMBER"
