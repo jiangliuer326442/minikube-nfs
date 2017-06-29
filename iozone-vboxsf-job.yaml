@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: iozone-vboxsf
+spec:
+  template:
+    spec:
+      volumes:
+        - name: users
+          hostPath:
+            path: /Users
+      containers:
+        - name: iozone
+          image: spirals/iozone3.434:latest
+          args: ["-a", "-f", "/Users/mstrzele/minikube-nfs", "-s", "64k", "-s", "128k", "-s", "256k"]
+          volumeMounts:
+            - mountPath: /Users/mstrzele
+              name: users
+              subPath: mstrzele
+      restartPolicy: Never
