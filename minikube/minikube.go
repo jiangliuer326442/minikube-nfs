@@ -38,7 +38,7 @@ func command(command ...string) (string, error) {
 	return strings.TrimSpace(string(out)), nil
 }
 
-const minikubeStatusFormat = "{{.MinikubeStatus}},{{.LocalkubeStatus}}"
+const minikubeStatusFormat = "{{.MinikubeStatus}},{{.ClusterStatus}}"
 
 // Status gets the status of a local kubernetes cluster.
 func Status() (string, string, error) {
