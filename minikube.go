@@ -10,7 +10,7 @@ import (
 func checkClusterPresence() {
 	clusterState, _, err := minikube.Status()
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Fatalln("Could not get cluster status: ", err)
 	}
 
 	logger := log.WithFields(log.Fields{"clusterState": clusterState})
